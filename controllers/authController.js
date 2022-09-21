@@ -38,12 +38,7 @@ const createSendToken = (user, statusCode, res) => {
 
 exports.signup = catchAsync(async (req, res, next) => {
   let newUser;
-  const fileStr = req.files.image;
-  let result = await cloudinary.uploader.upload(fileStr.tempFilePath, {
-		public_id: `${Date.now()}`,
-		resource_type: "auto", //jpeg,png
-	});
-    if(req.files.image === undefined){
+    if(req.files?.image === undefined){
       newUser = await User.create({
         name: req.body.name,
         email: req.body.email,
@@ -54,6 +49,11 @@ exports.signup = catchAsync(async (req, res, next) => {
         role: req.body.role
       });
     }else{
+      const fileStr = req.files.image;
+      let result = await cloudinary.uploader.upload(fileStr.tempFilePath, {
+        public_id: `${Date.now()}`,
+        resource_type: "auto", //jpeg,png
+      });
       newUser = await User.create({
         name: req.body.name,
         email: req.body.email,
